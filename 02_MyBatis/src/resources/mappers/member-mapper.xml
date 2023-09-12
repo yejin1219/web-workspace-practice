@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberMpper">
+
+<resultMap type="Member" id="memberMap">
+  <id property="id" column="memberid"/>
+   <result property="password" column ="memberpass"/>
+   <result property="name" column="membername"/>
+</resultMap>
+
+<insert id= "registerMember" parameterType="Member">
+INSERT INTO MEMBER(id, password, name) VALUES (#{id}, #{password}, #{name})
+</insert>
+
+<select id= "showAllMember" resultMap="Member">
+SELECT memberid, memberpass, membername FROM MEMBER
+</select>
+
+<select id= "findByMember" parameterType="String" resultType="Member">
+SELECT * FROM MEMBER WHERE id = #{id}
+
+</select>
+
+<select id="login" parameterType="list" resultType="Member">
+
+SELECT * FROM MEMBER WHERE id IN
+<foreach collection ="list" item="item" open="(" close=")" separator=",">
+  #{item}
+</foreach>
+
+
+</select>
+
+<update id="updateMember" parameterType="Mmeber">
+
+UPDATE MEMBER 
+<trim prefix="SET" suffixOverrides=",">
+<if test="password!=null">
+ password=#{password},
+
+</if>
+<if test = "name!=null">
+ name={#name}
+
+</if>
+</trim>
+ WHERE id=#{id}
+
+
+</update>
+
+
+
+
+</mapper>
